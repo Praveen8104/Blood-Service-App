@@ -1,3 +1,5 @@
+import { Colors } from '@/constants/Colors';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -10,140 +12,197 @@ import {
     TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    View
+    View,
+    useColorScheme
 } from 'react-native';
 
 const LoginScreen = () => {
-  const router = useRouter();
-  
-  // State for input fields
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+    const router = useRouter();
+    const colorScheme = useColorScheme() ?? 'light';
+    const theme = Colors[colorScheme];
 
-  const handleLogin = () => {
-    if (email && password) {
-      console.log('Logging in with:', email, password);
-      router.replace('/(main)'); 
-    } else {
-      alert('Please fill in all fields');
-    }
-  };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-  return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-        <StatusBar barStyle="light-content" />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inner}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to continue</Text>
+    const handleLogin = () => {
+        if (email && password) {
+            router.replace('/(main)');
+        } else {
+            alert('Please fill in all fields');
+        }
+    };
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
+    return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={[styles.container, { backgroundColor: theme.background }]}
+        >
+            <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.inner}>
+                    
+                    {/* Brand Icon / Logo */}
+                    <View style={styles.logoContainer}>
+                        <View style={[styles.iconCircle, { backgroundColor: theme.primaryLight }]}>
+                            <MaterialCommunityIcons name="water" size={60} color={theme.primary} />
+                        </View>
+                        <Text style={[styles.brandName, { color: theme.primary }]}>LifeStream</Text>
+                    </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry // Hides the password characters
-            />
-          </View>
+                    <Text style={[styles.title, { color: theme.text }]}>Welcome Back</Text>
+                    <Text style={[styles.subtitle, { color: theme.textMuted }]}>Sign in to save lives today</Text>
 
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Log In</Text>
-          </TouchableOpacity>
+                    {/* Email Input */}
+                    <View style={styles.inputGroup}>
+                        <Text style={[styles.label, { color: theme.text }]}>Email Address</Text>
+                        <View style={[styles.inputWrapper, { backgroundColor: theme.card, borderColor: theme.border }]}>
+                            <Ionicons name="mail-outline" size={20} color={theme.textMuted} style={styles.inputIcon} />
+                            <TextInput
+                                style={[styles.input, { color: theme.text }]}
+                                placeholder="name@example.com"
+                                placeholderTextColor={theme.placeholder}
+                                value={email}
+                                onChangeText={setEmail}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                        </View>
+                    </View>
 
-          <TouchableOpacity onPress={() => router.push('/(auth)/signupscreen')}>
-            <Text style={styles.linkText}>
-              Don{'\''}t have an account? <Text style={styles.linkBold}>Sign Up</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
-  );
+                    {/* Password Input */}
+                    <View style={styles.inputGroup}>
+                        <Text style={[styles.label, { color: theme.text }]}>Password</Text>
+                        <View style={[styles.inputWrapper, { backgroundColor: theme.card, borderColor: theme.border }]}>
+                            <Ionicons name="lock-closed-outline" size={20} color={theme.textMuted} style={styles.inputIcon} />
+                            <TextInput
+                                style={[styles.input, { color: theme.text }]}
+                                placeholder="••••••••"
+                                placeholderTextColor={theme.placeholder}
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry
+                            />
+                        </View>
+                    </View>
+
+                    {/* Forgot Password */}
+                    <TouchableOpacity style={styles.forgotBtn}>
+                        <Text style={[styles.forgotText, { color: theme.primary }]}>Forgot Password?</Text>
+                    </TouchableOpacity>
+
+                    {/* Login Button */}
+                    <TouchableOpacity 
+                        style={[styles.button, { backgroundColor: theme.primary }]} 
+                        onPress={handleLogin}
+                    >
+                        <Text style={styles.buttonText}>Sign In</Text>
+                    </TouchableOpacity>
+
+                    {/* Sign Up Link */}
+                    <TouchableOpacity onPress={() => router.push('/(auth)/signupscreen')} style={styles.footer}>
+                        <Text style={[styles.linkText, { color: theme.textMuted }]}>
+                            New here? <Text style={[styles.linkBold, { color: theme.primary }]}>Create Account</Text>
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  inner: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#444',
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 12,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#E8E8E8',
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10,
-    shadowColor: '#007AFF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 3, // Shadow for Android
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  linkText: {
-    textAlign: 'center',
-    marginTop: 24,
-    color: '#666',
-    fontSize: 14,
-  },
-  linkBold: {
-    color: '#007AFF',
-    fontWeight: '700',
-  },
+    container: {
+        flex: 1,
+    },
+    inner: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 30,
+    },
+    logoContainer: {
+        alignItems: 'center',
+        marginBottom: 40,
+    },
+    iconCircle: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    brandName: {
+        fontSize: 22,
+        fontWeight: '900',
+        letterSpacing: 1,
+    },
+    title: {
+        fontSize: 28,
+        fontWeight: '800',
+        marginBottom: 6,
+    },
+    subtitle: {
+        fontSize: 16,
+        marginBottom: 32,
+    },
+    inputGroup: {
+        marginBottom: 18,
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: '700',
+        marginBottom: 8,
+        marginLeft: 4,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 16,
+        borderWidth: 1,
+        paddingHorizontal: 16,
+        height: 56,
+    },
+    inputIcon: {
+        marginRight: 12,
+    },
+    input: {
+        flex: 1,
+        fontSize: 16,
+    },
+    forgotBtn: {
+        alignSelf: 'flex-end',
+        marginBottom: 30,
+    },
+    forgotText: {
+        fontSize: 14,
+        fontWeight: '600',
+    },
+    button: {
+        height: 56,
+        borderRadius: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: '700',
+    },
+    footer: {
+        marginTop: 25,
+    },
+    linkText: {
+        textAlign: 'center',
+        fontSize: 15,
+    },
+    linkBold: {
+        fontWeight: '800',
+    },
 });
 
 export default LoginScreen;
