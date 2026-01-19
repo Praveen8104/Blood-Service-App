@@ -1,4 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import {
     FlatList,
@@ -21,6 +22,7 @@ const URGENT_REQUESTS = [
 const HomeScreen = () => {
     const colorScheme = useColorScheme() ?? 'light';
     const theme = Colors[colorScheme];
+    const router = useRouter();
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]} edges={['top', 'left', 'right']}>
@@ -32,7 +34,7 @@ const HomeScreen = () => {
                         <Text style={[styles.greeting, { color: theme.text }]}>Hello, Praveen</Text>
                         <Text style={[styles.subGreeting, { color: theme.textMuted }]}>Your blood can save a life today</Text>
                     </View>
-                    <TouchableOpacity style={[styles.notificationBtn, { backgroundColor: theme.card }]}>
+                    <TouchableOpacity style={[styles.notificationBtn, { backgroundColor: theme.card }]} onPress={() => router.push('/notifications')}>
                         <Ionicons name="notifications-outline" size={24} color={theme.icon} />
                         <View style={[styles.badge, { backgroundColor: theme.primary, borderColor: theme.card }]} />
                     </TouchableOpacity>
@@ -91,6 +93,22 @@ const HomeScreen = () => {
                 />
 
                 {/* Awareness Banner */}
+                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
+                    <Ionicons name="information-circle" size={24} color={theme.white} />
+                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
+                    <Ionicons name="information-circle" size={24} color={theme.white} />
+                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
+                    <Ionicons name="information-circle" size={24} color={theme.white} />
+                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
+                    <Ionicons name="information-circle" size={24} color={theme.white} />
+                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
                     <Ionicons name="information-circle" size={24} color={theme.white} />
                     <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>

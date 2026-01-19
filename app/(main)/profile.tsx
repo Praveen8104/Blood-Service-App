@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
     Image,
+    Platform,
     ScrollView,
     StyleSheet,
     Switch,
@@ -19,57 +20,72 @@ const ProfileScreen = () => {
     const theme = Colors[colorScheme];
     const router = useRouter();
 
-    // State for "Available to Donate" toggle
     const [isAvailable, setIsAvailable] = useState(true);
 
     const handleLogout = () => {
-        // Navigate back to auth group
         router.replace('/(auth)/loginscreen');
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top', 'left', 'right']}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
 
-                {/* Profile Header */}
+                {/* Header: User Identity */}
                 <View style={styles.header}>
                     <View style={[styles.imageContainer, { borderColor: theme.primary }]}>
                         <Image
                             source={{ uri: 'https://i.pravatar.cc/150?u=praveenreddygoli8' }}
                             style={styles.profileImage}
                         />
-                        <TouchableOpacity style={[styles.editIcon, { backgroundColor: theme.primary }]}>
-                            <Ionicons name="camera" size={16} color="#FFF" />
-                        </TouchableOpacity>
+                        <View style={[styles.bloodTypeBadge, { backgroundColor: theme.primary }]}>
+                            <Text style={styles.bloodTypeText}>B+</Text>
+                        </View>
                     </View>
                     <Text style={[styles.userName, { color: theme.text }]}>Praveen Reddy</Text>
-                    <Text style={[styles.userEmail, { color: theme.textMuted }]}>praveenreddygoli8@gmail.com</Text>
+                    <View style={styles.locationRow}>
+                        <Ionicons name="location" size={14} color={theme.primary} />
+                        <Text style={[styles.locationText, { color: theme.textMuted }]}>Kakinada, AP</Text>
+                    </View>
                 </View>
 
-                {/* Impact Stats */}
-                <View style={styles.statsContainer}>
-                    <View style={[styles.statBox, { backgroundColor: theme.card }]}>
-                        <Text style={[styles.statNumber, { color: theme.primary }]}>04</Text>
+                {/* Donor Achievement Card */}
+                <View style={[styles.achievementCard, { backgroundColor: theme.primary }]}>
+                    <View style={styles.achievementInfo}>
+                        <Text style={styles.achievementTitle}>Silver Donor</Text>
+                        <Text style={styles.achievementSub}>2 donations away from Gold</Text>
+                    </View>
+                    <MaterialCommunityIcons name="medal" size={40} color="#FFD700" />
+                </View>
+
+                {/* Impact Stats Grid */}
+                <View style={styles.statsGrid}>
+                    <View style={[styles.statItem, { backgroundColor: theme.card }]}>
+                        <MaterialCommunityIcons name="water" size={24} color={theme.primary} />
+                        <Text style={[styles.statValue, { color: theme.text }]}>04</Text>
                         <Text style={[styles.statLabel, { color: theme.textMuted }]}>Donations</Text>
                     </View>
-                    <View style={[styles.statBox, { backgroundColor: theme.card }]}>
-                        <Text style={[styles.statNumber, { color: theme.secondary }]}>12</Text>
+                    <View style={[styles.statItem, { backgroundColor: theme.card }]}>
+                        <MaterialCommunityIcons name="heart-pulse" size={24} color={theme.secondary} />
+                        <Text style={[styles.statValue, { color: theme.text }]}>12</Text>
                         <Text style={[styles.statLabel, { color: theme.textMuted }]}>Lives Saved</Text>
                     </View>
-                    <View style={[styles.statBox, { backgroundColor: theme.card }]}>
-                        <Text style={[styles.statNumber, { color: '#FFB100' }]}>B+</Text>
-                        <Text style={[styles.statLabel, { color: theme.textMuted }]}>Group</Text>
+                    <View style={[styles.statItem, { backgroundColor: theme.card }]}>
+                        <MaterialCommunityIcons name="calendar-check" size={24} color="#FFB100" />
+                        <Text style={[styles.statValue, { color: theme.text }]}>Jan 15</Text>
+                        <Text style={[styles.statLabel, { color: theme.textMuted }]}>Last Post</Text>
                     </View>
                 </View>
 
-                {/* Availability Toggle */}
+                {/* Availability Section */}
                 <View style={[styles.section, { backgroundColor: theme.card }]}>
-                    <View style={styles.settingsRow}>
-                        <View style={styles.settingsLabelGroup}>
-                            <MaterialCommunityIcons name="map-marker-radius" size={24} color={theme.primary} />
-                            <View style={{ marginLeft: 15 }}>
-                                <Text style={[styles.settingsTitle, { color: theme.text }]}>Available to Donate</Text>
-                                <Text style={[styles.settingsSub, { color: theme.textMuted }]}>Show your location to seekers</Text>
+                    <View style={styles.row}>
+                        <View style={styles.rowLabel}>
+                            <View style={[styles.iconCircle, { backgroundColor: theme.primaryLight }]}>
+                                <MaterialCommunityIcons name="map-marker-radius" size={22} color={theme.primary} />
+                            </View>
+                            <View style={{ marginLeft: 12 }}>
+                                <Text style={[styles.rowTitle, { color: theme.text }]}>Active Donor Status</Text>
+                                <Text style={[styles.rowSub, { color: theme.textMuted }]}>Visible on nearby map</Text>
                             </View>
                         </View>
                         <Switch
@@ -81,18 +97,35 @@ const ProfileScreen = () => {
                     </View>
                 </View>
 
-                {/* Settings Options */}
-                <View style={[styles.section, { backgroundColor: theme.card, marginTop: 20 }]}>
-                    <SettingItem icon="person-outline" title="Edit Profile" theme={theme} />
-                    <SettingItem icon="document-text-outline" title="Donation History" theme={theme} />
-                    <SettingItem icon="shield-checkmark-outline" title="Medical Records" theme={theme} />
-                    <SettingItem icon="notifications-outline" title="Notification Settings" theme={theme} />
-
-                    <TouchableOpacity
-                        style={[styles.logoutBtn, { borderTopColor: theme.border }]}
+                {/* Settings Menu */}
+                <View style={[styles.section, { backgroundColor: theme.card, marginTop: 15 }]}>
+                    <SettingItem 
+                        icon="person-outline" 
+                        title="Personal Information" 
+                        theme={theme} 
+                        onPress={() => router.push('/editprofile')} 
+                    />
+                    <SettingItem 
+                        icon="medical-outline" 
+                        title="Health Report" 
+                        theme={theme} 
+                    />
+                    <SettingItem 
+                        icon="time-outline" 
+                        title="Donation Schedule" 
+                        theme={theme} 
+                    />
+                    <SettingItem 
+                        icon="settings-outline" 
+                        title="App Settings" 
+                        theme={theme} 
+                    />
+                    
+                    <TouchableOpacity 
+                        style={styles.logoutBtn} 
                         onPress={handleLogout}
                     >
-                        <Ionicons name="log-out-outline" size={24} color={theme.primary} />
+                        <Ionicons name="log-out-outline" size={22} color={theme.primary} />
                         <Text style={[styles.logoutText, { color: theme.primary }]}>Sign Out</Text>
                     </TouchableOpacity>
                 </View>
@@ -102,120 +135,167 @@ const ProfileScreen = () => {
     );
 };
 
-// Helper component for settings rows
-const SettingItem = ({ icon, title, theme }: { icon: any, title: string, theme: any }) => (
-    <TouchableOpacity style={[styles.settingsRow, { borderBottomWidth: 1, borderBottomColor: theme.background }]}>
-        <View style={styles.settingsLabelGroup}>
-            <Ionicons name={icon} size={22} color={theme.text} />
-            <Text style={[styles.settingsTitle, { color: theme.text, marginLeft: 15 }]}>{title}</Text>
+const SettingItem = ({ icon, title, theme, onPress }: any) => (
+    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.background }]} onPress={onPress}>
+        <View style={styles.rowLabel}>
+            <Ionicons name={icon} size={20} color={theme.text} />
+            <Text style={[styles.menuText, { color: theme.text }]}>{title}</Text>
         </View>
-        <Ionicons name="chevron-forward" size={20} color={theme.textMuted} />
+        <Ionicons name="chevron-forward" size={18} color={theme.textMuted} />
     </TouchableOpacity>
 );
 
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
+    scrollContent: {
+        paddingBottom: 40,
+    },
     header: {
         alignItems: 'center',
-        paddingVertical: 30,
+        paddingVertical: 25,
     },
     imageContainer: {
-        width: 110,
-        height: 110,
-        borderRadius: 55,
-        borderWidth: 3,
-        padding: 3,
-        marginBottom: 15,
+        width: 100,
+        height: 100,
         position: 'relative',
+        marginBottom: 15,
     },
     profileImage: {
         width: '100%',
         height: '100%',
-        borderRadius: 55,
+        borderRadius: 50,
     },
-    editIcon: {
+    bloodTypeBadge: {
         position: 'absolute',
-        bottom: 0,
-        right: 0,
-        width: 34,
-        height: 34,
-        borderRadius: 17,
-        justifyContent: 'center',
-        alignItems: 'center',
+        bottom: -5,
+        right: -5,
+        width: 36,
+        height: 36,
+        borderRadius: 18,
         borderWidth: 3,
         borderColor: '#FFF',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    bloodTypeText: {
+        color: '#FFF',
+        fontWeight: '900',
+        fontSize: 12,
     },
     userName: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 22,
+        fontWeight: '800',
     },
-    userEmail: {
-        fontSize: 14,
+    locationRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginTop: 4,
     },
-    statsContainer: {
+    locationText: {
+        fontSize: 13,
+        marginLeft: 4,
+    },
+    achievementCard: {
+        marginHorizontal: 20,
+        borderRadius: 16,
+        padding: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20,
+        ...Platform.select({
+            ios: { shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 10, shadowOffset: { width: 0, height: 5 } },
+            android: { elevation: 5 },
+        }),
+    },
+    achievementInfo: {
+        flex: 1,
+    },
+    achievementTitle: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    achievementSub: {
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: 12,
+        marginTop: 2,
+    },
+    statsGrid: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 20,
-        marginBottom: 30,
+        marginBottom: 20,
     },
-    statBox: {
-        width: '30%',
+    statItem: {
+        width: '31%',
         paddingVertical: 15,
         borderRadius: 16,
         alignItems: 'center',
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOpacity: 0.05,
-        shadowRadius: 5,
+        borderWidth: 1,
+        borderColor: 'rgba(0,0,0,0.05)',
     },
-    statNumber: {
-        fontSize: 20,
+    statValue: {
+        fontSize: 18,
         fontWeight: 'bold',
+        marginTop: 8,
     },
     statLabel: {
-        fontSize: 12,
-        marginTop: 4,
+        fontSize: 11,
+        marginTop: 2,
     },
     section: {
         marginHorizontal: 20,
-        borderRadius: 20,
-        paddingVertical: 10,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOpacity: 0.05,
-        shadowRadius: 10,
+        borderRadius: 16,
+        padding: 4,
     },
-    settingsRow: {
+    row: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
+        padding: 12,
     },
-    settingsLabelGroup: {
+    rowLabel: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-    settingsTitle: {
-        fontSize: 16,
-        fontWeight: '600',
+    iconCircle: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    settingsSub: {
-        fontSize: 12,
+    rowTitle: {
+        fontSize: 15,
+        fontWeight: '700',
+    },
+    rowSub: {
+        fontSize: 11,
+    },
+    menuItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+    },
+    menuText: {
+        fontSize: 15,
+        fontWeight: '600',
+        marginLeft: 12,
     },
     logoutBtn: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 20,
-        marginTop: 10,
-        borderTopWidth: 1,
     },
     logoutText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginLeft: 10,
+        fontSize: 15,
+        fontWeight: '700',
+        marginLeft: 8,
     },
 });
