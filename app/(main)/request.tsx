@@ -169,7 +169,7 @@ const RequestScreen = () => {
                     </View>
 
                     {/* Submit Button */}
-                    <TouchableOpacity style={[styles.submitButton, { backgroundColor: theme.secondary }]} onPress={handleSubmit}>
+                    <TouchableOpacity style={[styles.submitButton, { backgroundColor: theme.primary }]} onPress={handleSubmit}>
                         <MaterialCommunityIcons name="send" size={20} color={theme.white} style={{ marginRight: 8 }} />
                         <Text style={[styles.submitButtonText, { color: theme.white }]}>Post Request</Text>
                     </TouchableOpacity>

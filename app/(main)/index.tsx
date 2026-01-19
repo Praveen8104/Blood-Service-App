@@ -97,22 +97,6 @@ const HomeScreen = () => {
                     <Ionicons name="information-circle" size={24} color={theme.white} />
                     <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
-                    <Ionicons name="information-circle" size={24} color={theme.white} />
-                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
-                    <Ionicons name="information-circle" size={24} color={theme.white} />
-                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
-                    <Ionicons name="information-circle" size={24} color={theme.white} />
-                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.banner, { backgroundColor: theme.primary }]}>
-                    <Ionicons name="information-circle" size={24} color={theme.white} />
-                    <Text style={[styles.bannerText, { color: theme.white }]}>How many lives can one donation save? Learn more.</Text>
-                </TouchableOpacity>
 
             </ScrollView>
         </SafeAreaView>
